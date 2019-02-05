@@ -22,7 +22,6 @@ minikube-start:
 		-certfile ~/.minikube/ca.crt \
 		-passout pass:secret
 
-
 print-my-ip-addr:
 ifeq ($(OS_TYPE), Darwin)
 	HOST_IP=$(shell ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $$2}' | head -1)
