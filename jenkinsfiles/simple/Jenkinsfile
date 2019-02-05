@@ -5,9 +5,10 @@ pipeline {
     kubernetes {
       label 'simple-pipeline'
       defaultContainer 'jnlp'
-      yamlFile 'jenkinsfiles/simple/pods.yaml'
+      yamlFile 'jenkins-manifests/busybox.yaml'
     }
   }
+
   stages {
     stage('Run maven') {
       steps {
