@@ -8,7 +8,6 @@ pipeline {
       yamlFile 'jenkins-manifests/busybox.yaml'
     }
   }
-
   stages {
     stage('Run maven') {
       steps {
