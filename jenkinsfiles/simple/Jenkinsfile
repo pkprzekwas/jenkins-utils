@@ -5,7 +5,7 @@ pipeline {
     kubernetes {
       label 'simple-pipeline'
       defaultContainer 'jnlp'
-      yamlFile 'pods.yaml'
+      yamlFile 'jenkinsfiles/simple/pods.yaml'
     }
   }
   stages {
