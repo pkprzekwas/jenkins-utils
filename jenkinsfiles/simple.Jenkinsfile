@@ -1,3 +1,5 @@
+@Library('utils') _
+
 pipeline {
   agent {
     kubernetes {
@@ -34,6 +36,13 @@ spec:
           sh '/bin/busybox'
         }
       }
+    }
+    stage('Test shared library') {
+    	steps {
+    		container('busybox') {
+    			notifySlack "Hello from shared library."
+    		}
+    	}
     }
   }
 }
