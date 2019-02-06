@@ -6,7 +6,7 @@ def test_adding():
 
 
 def test_multiplying():
-    assert 2*2 == 4
+    assert 2 * 2 == 4
 
 
 def test_subtracting():
