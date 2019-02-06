@@ -30,7 +30,7 @@ docker-publish: docker-login docker-build
 	@$(D) push $(DOCKER_REPO):$(BUILD_ID)
 
 test:
-	@$(D) run --rm $(DOCKER_REPO) pytest
+	@$(D) run --rm $(DOCKER_REPO) pytest --cov=app --cov-report html .
 
 lint:
 	@$(D) run --rm $(DOCKER_REPO) flake8 .
