@@ -6,9 +6,13 @@ BUILD_ID ?= $(shell uuidgen | head -c 8)
 
 DOCKER_USER ?=
 DOCKER_PASS_BASE64 ?=
-DOCKER_PASS_DECODED := $(shell echo $(DOCKER_PASS) | base64 --decode)
 
 DOCKER_REPO := pkprzekwas/flask-app
+ifeq ($(OS_TYPE), Darwin)
+	DOCKER_PASS_DECODED := $(shell echo $(DOCKER_PASS) | base64 -D)
+else
+	DOCKER_PASS_DECODED := $(shell echo $(DOCKER_PASS) | base64 -d)
+endif
 
 clean-pyc:
 	@find . -name '*.pyc' -exec rm -rf {} +

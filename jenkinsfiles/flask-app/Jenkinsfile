@@ -13,11 +13,6 @@ pipeline {
       steps {
         container('dind') {
           sh '''
-            ls .
-            sleep 10
-            pwd
-            ls .
-            cat requirements.txt
           	make docker-build
 		  '''
         }
