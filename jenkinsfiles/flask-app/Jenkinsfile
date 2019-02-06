@@ -12,7 +12,14 @@ pipeline {
     stage('Build docker image') {
       steps {
         container('dind') {
-          sh 'make docker-build'
+          sh '''
+            ls .
+            sleep 10
+            pwd
+            ls .
+            cat requirements.txt
+          	make docker-build
+		  '''
         }
       }
     }
