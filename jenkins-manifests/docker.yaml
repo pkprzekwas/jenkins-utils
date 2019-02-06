@@ -12,7 +12,7 @@ spec:
     - sh
     args:
       - -c
-      - "apk add make && cat"
+      - "sleep 10 && ls && pwd && apk add make && cat"
     tty: true
     volumeMounts:
       - mountPath: /var/run/docker.sock
