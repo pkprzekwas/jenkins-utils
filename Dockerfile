@@ -5,9 +5,10 @@ ENV PYTHONPATH=/workspace/:$PYTHONPATH
 
 WORKDIR /workspace
 
-ADD ./app ./app
 ADD ./requirements.txt .
 
 RUN pip install -r requirements.txt
+
+ADD ./app ./app
 
 CMD ["flask", "run", "--host=0.0.0.0"]
