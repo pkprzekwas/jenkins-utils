@@ -8,6 +8,7 @@ spec:
   - name: dind
     image: docker:latest
     command:
+    - apk add make
     - cat
     tty: true
     volumeMounts:
