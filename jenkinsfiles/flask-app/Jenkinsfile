@@ -1,0 +1,27 @@
+@Library('utils') _
+
+pipeline {
+  agent {
+    kubernetes {
+      label 'flask-app'
+      defaultContainer 'jnlp'
+      yamlFile 'jenkins-manifests/docker.yaml'
+    }
+  }
+  stages {
+    stage('Build docker image') {
+      steps {
+        container('dind') {
+          sh 'make docker-build'
+        }
+      }
+    }
+    stage('Test shared library') {
+    	steps {
+    		container('dind') {
+    			notifySlack "Hello from shared library."
+    		}
+    	}
+    }
+  }
+}

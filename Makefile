@@ -1,26 +1,44 @@
+D := docker
+
 OS_TYPE := $(shell uname)
+PYTHONPATH := $(shell pwd):$$PYTHONPATH
+BUILD_ID ?= $(shell uuidgen | head -c 8)
 
-#	https://github.com/jenkinsci/docker/blob/master/README.md
-build-jenkins:
-	docker build -t jenkins:local ./jenkins
+DOCKER_USER ?=
+DOCKER_PASS_BASE64 ?=
+DOCKER_PASS_DECODED := $(shell echo $(DOCKER_PASS) | base64 --decode)
 
-run-jenkins: build-jenkins
-	docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins:local
+DOCKER_REPO := pkprzekwas/flask-app
+
+clean-pyc:
+	@find . -name '*.pyc' -exec rm -rf {} +
+	@find . -name '*.pyo' -exec rm -rf {} +
+
+docker-login:
+	@docker login -u $(DOCKER_USER) -p $(DOCKER_PASS_DECODED)
+
+docker-build: clean-pyc
+	@$(D) build -t $(DOCKER_REPO) .
+	@$(D) tag $(DOCKER_REPO):latest $(DOCKER_REPO):$(BUILD_ID)
+
+docker-publish: docker-login docker-build
+	@$(D) push $(DOCKER_REPO):latest
+	@$(D) push $(DOCKER_REPO):$(BUILD_ID)
+
+test:
+	@$(D) run -it --rm $(DOCKER_REPO) pytest
+
+lint:
+	@$(D) run -it --rm $(DOCKER_REPO) flake8 .
+
+jenkins-build-image:
+	@$(D) build -t jenkins:local ./jenkins
+
+jenkins-run: build-jenkins
+	@$(D) run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins:local
 
 minikube-start:
-	minikube start \
-		--vm-driver=virtualbox \
-		--cpus 2 \
-		--disk-size 20g \
-		--memory 4096 \
-		--network-plugin=cni \
-		--kubernetes-version=v1.11.5
-	openssl pkcs12 -export \
-		-out ~/.minikube/minikube.pfx \
-		-inkey ~/.minikube/apiserver.key \
-		-in ~/.minikube/apiserver.crt \
-		-certfile ~/.minikube/ca.crt \
-		-passout pass:secret
+	@./scripts/minikube_start.sh
 
 print-my-ip-addr:
 ifeq ($(OS_TYPE), Darwin)
