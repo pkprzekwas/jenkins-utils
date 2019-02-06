@@ -30,10 +30,10 @@ docker-publish: docker-login docker-build
 	@$(D) push $(DOCKER_REPO):$(BUILD_ID)
 
 test:
-	@$(D) run -it --rm $(DOCKER_REPO) pytest
+	@$(D) run --rm $(DOCKER_REPO) pytest
 
 lint:
-	@$(D) run -it --rm $(DOCKER_REPO) flake8 .
+	@$(D) run --rm $(DOCKER_REPO) flake8 .
 
 jenkins-build-image:
 	@$(D) build -t jenkins:local ./jenkins
