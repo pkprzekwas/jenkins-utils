@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-dind
   labels:
     gh-jenkins-pod-type: dind
 spec:
@@ -8,8 +9,10 @@ spec:
   - name: dind
     image: docker:latest
     command:
-    - apk add make
-    - cat
+    - sh
+    args:
+      - -c
+      - "apk add make && cat"
     tty: true
     volumeMounts:
       - mountPath: /var/run/docker.sock
