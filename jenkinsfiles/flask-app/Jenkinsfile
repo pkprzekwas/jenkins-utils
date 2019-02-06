@@ -12,9 +12,21 @@ pipeline {
     stage('Build docker image') {
       steps {
         container('dind') {
-          sh '''
-          	make docker-build
-		  '''
+          sh 'make docker-build'
+        }
+      }
+    }
+    stage('Lint') {
+      steps {
+        container('dind') {
+          sh 'make lint'
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        container('dind') {
+          sh 'make test'
         }
       }
     }
